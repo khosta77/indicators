@@ -24,9 +24,9 @@ struct Candle {
     int date;
     int time;
     unsigned long long value;
-
-    std::map<std::string, std::vector<double>> indicator;
 };
+
+typedef std::pair<std::vector<Candle>, std::map<std::string>, std::vector<double>> Stock;
 
 /* \brief Функция считывает из csv файла таблицу с котировками, ввиду того, что для анализа обычно используют
  *        не обработанные данные, то соответственно считываются только стандартные данные свечи.
