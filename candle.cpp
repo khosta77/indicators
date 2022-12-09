@@ -3,7 +3,7 @@
 /* \brief Функция возращает код тикера
  * \param id - тикер
  * */
-static const int get_code_id(const std::string& id) const {
+static const int get_code_id(const std::string& id) {
     if (id == "DATE")
         return DATE;
     if (id == "TIME")
