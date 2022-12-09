@@ -6,3 +6,5 @@ Makefile
 cmake_install.cmake
 CMakeCache.txt
 *data.txt
+*.DS_Store
+.ipynb_checkpoints/
