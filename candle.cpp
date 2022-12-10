@@ -117,4 +117,72 @@ std::vector<Candle> readcsv(const std::string& filename) {
     return cndls;
 }
 
+//// Constructor && destructor
+Stock::Stock(const std::string& fn) {
+    read_csv(fn);
+}
+
+//// in && out methods
+/* \brief Функция считывает из csv файла таблицу с котировками, ввиду того, что для анализа обычно используют
+ *        не обработанные данные, то соответственно считываются только стандартные данные свечи.
+ * \param filename - путь до файла
+ * */
+void Stock::read_csv(const std::string& fn) {
+    std::vector<Candle> cndls;
+    std::ifstream in(fn);
+    if (in.is_open()) {
+        std::string line;
+        getline(in, line);
+        auto title = read_colomn_name_and_position(line);
+        while (getline(in, line))
+            cndls.push_back(get_candle_from_line(line, title));
+    }
+    in.close();
+    stock.first = cndls;
+    cndls.clear;
+    stock.second = std::map<std::string, std::vector<double>>();
+}
+
+void Stock::save_csv(const std::string& fn) {
+    std::ofstream out;
+    out.open(fn);
+    if (out.is_open()) {
+        // Записываем заголовок
+        out << "DATE;TIME;OPEN;HIGH;LOW;CLOSE;VOL";
+        if (!stock.second.empty())
+            for (auto &it : stock)
+                out << ";" << it.first;
+        out << std::endl;
+
+        // записываем основоной набор данных
+        if (stock.second.empty())
+            for (size_t i = 0; i < stock.first.size(); ++i)
+                out << stock.first[i].date << ";" << stock.first[i].time << ";" << stock.first[i].open << ";" 
+                    << stock.first[i].high << ";" << stock.first[i].low << ";" << stock.first[i].close << ";"
+                    << stock.first[i].value << std::endl;
+        else {
+            for (size_t i = 0; i < stock.first.size(); ++i) {
+                out << stock.first[i].date << ";" << stock.first[i].time << ";" << stock.first[i].open << ";" 
+                    << stock.first[i].high << ";" << stock.first[i].low << ";" << stock.first[i].close << ";"
+                    << stock.first[i].value;
+                for (auto &it : stock)
+                    out << ";" <<it.second[i];
+                out << std::endl;
+            }   
+        }
+    }
+}
+
+void Stock::print() {
+
+}
+
+//// indicators
+void Stock::apIndi(const std::pair<std::string, std::vector<double>>& indi);
+
+//// get
+_obj Stock::getThis();
+std::vector<Candle> Stock::getCandle();
+std::map<std::string, std::vector<double>> Stock::getIndicators();
+ 
 
