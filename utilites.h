@@ -9,7 +9,8 @@
 #include <cstdlib>
 #include <iomanip>
 #include "candle.h"
-
+#include <functional>
+#include <algorithm>
 
 void outCandle(std::vector<Candle> cndls) {
 #define SIZE_COLOMN 9
@@ -55,5 +56,30 @@ const std::vector<double> get_price_stock(const std::vector<Candle>& cndls, cons
     };
     return history_stock;
 }
+
+
+class Menu {
+
+    std::vector<Stock> stocks;
+    std::vector<<std::pair<std::string, std::function<
+        std::pair<std::string, std::vector<double>>(const std::vector<double>&, const int&)
+        >>> indicators = {
+            std::pair("SMA", SMA::sma)
+        };
+
+    void print_menu();
+    void print_indicators();
+
+    void open_file(const std::string& fn);
+    void apply_indicator(const Stock& sk, const int& indi_id);
+    void save_file(const stock& sk, const std::string& fn);
+    void pring_stock(const stock& sk);
+public:
+    Menu(/* На вход параметры из main*/) = default;
+    ~Menu() = default;
+
+    void run();
+
+};
 
 #endif // INDICATOR_UTILITES_H_
