@@ -31,7 +31,7 @@ struct Candle {
 
 class Stock {
     std::pair<std::vector<Candle>, std::map<std::string, std::vector<double>>> stock;  // Сама акция
-    const int SIZE_COLUMN = 8;  // Привыводе в консоль ширина колонки будет 8
+    const int SIZE_COLUMN = 11;  // Привыводе в консоль ширина колонки будет 8
 
     /* \brief Метод возращает массив свечей
      * \param line - строка с численной информацией
