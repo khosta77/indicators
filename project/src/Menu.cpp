@@ -60,7 +60,7 @@ void Menu::apply_indicator() {
     std::cin >> ind;
     std::cout << "Enter a range: ";
     std::cin >> day;
-    std::cout << "Candle marker(OPEN: 1, HIGH: 2, LOW: 3, CLOSE: 4): ";
+    std::cout << "Candle marker(OPEN: 2, HIGH: 3, LOW: 4, CLOSE: 5): ";
     std::cin >> candle_marker;
     std::cout << "Enter the name of the table: ";
     std::cin >> tablename;
