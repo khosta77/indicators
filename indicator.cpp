@@ -9,7 +9,7 @@ namespace SMA {
             double price = std::accumulate(stock.begin(), stock.end(), double(0));
             std::vector<double> sma;
             sma.push_back(price / day);
-            return std::pair(("SMA" + std::to_string(day), sma));
+            return std::pair(("SMA" + std::to_string(day)), sma);
         }
 
         std::vector<double> sma(day, 0);
