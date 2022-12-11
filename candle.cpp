@@ -99,23 +99,6 @@ static const Candle get_candle_from_line(const std::string& line,
     return cndl;
 }
 
-/* \brief Функция считывает из csv файла таблицу с котировками, ввиду того, что для анализа обычно используют
- *        не обработанные данные, то соответственно считываются только стандартные данные свечи.
- * \param filename - путь до файла
- * */
-std::vector<Candle> readcsv(const std::string& filename) {
-    std::vector<Candle> cndls;
-    std::ifstream in(filename);
-    if (in.is_open()) {
-        std::string line;
-        getline(in, line);
-        auto title = read_colomn_name_and_position(line);
-        while (getline(in, line))
-            cndls.push_back(get_candle_from_line(line, title));
-    }
-    in.close();
-    return cndls;
-}
 
 //// Constructor && destructor
 Stock::Stock(const std::string& fn) {
@@ -174,15 +157,84 @@ void Stock::save_csv(const std::string& fn) {
 }
 
 void Stock::print() {
+    // Записываем заголовок
+    std::cout << std::setw(SIZE_COLOMN) << "DATE"
+              << std::setw(SIZE_COLOMN) << "TIME"
+              << std::setw(SIZE_COLOMN) << "OPEN"
+              << std::setw(SIZE_COLOMN) << "HIGH"
+              << std::setw(SIZE_COLOMN) << "LOW"
+              << std::setw(SIZE_COLOMN) << "CLOSE"
+              << std::setw(SIZE_COLOMN) << "VOL";
+    if (!stock.second.empty())
+        for (auto &it : stock)
+            std::cout << std::setw(SIZE_COLOMN) << it.first;
+    std::cout << std::endl;
 
+    // записываем основоной набор данных
+    if (stock.second.empty())
+        for (size_t i = 0; i < stock.first.size(); ++i)
+            std::cout << std::setw(SIZE_COLOMN) << stock.first[i].date
+                      << std::setw(SIZE_COLOMN) << stock.first[i].time 
+                      << std::setw(SIZE_COLOMN) << stock.first[i].open 
+                      << std::setw(SIZE_COLOMN) << stock.first[i].high 
+                      << std::setw(SIZE_COLOMN) << stock.first[i].low 
+                      << std::setw(SIZE_COLOMN) << stock.first[i].close 
+                      << std::setw(SIZE_COLOMN) << stock.first[i].value << std::endl;
+    else {
+        for (size_t i = 0; i < stock.first.size(); ++i) {
+            std::cout << std::setw(SIZE_COLOMN) << stock.first[i].date
+                      << std::setw(SIZE_COLOMN) << stock.first[i].time
+                      << std::setw(SIZE_COLOMN) << stock.first[i].open
+                      << std::setw(SIZE_COLOMN) << stock.first[i].high
+                      << std::setw(SIZE_COLOMN) << stock.first[i].low
+                      << std::setw(SIZE_COLOMN) << stock.first[i].close
+                      << std::setw(SIZE_COLOMN) << stock.first[i].value;
+            for (auto &it : stock)
+                std::cout << std::setw(SIZE_COLOMN) <<it.second[i];
+            std::cout << std::endl;
+        }   
+    }
 }
 
 //// indicators
-void Stock::apIndi(const std::pair<std::string, std::vector<double>>& indi);
+const std::vector<double> get_price_stock(const int& id) {
+    std::vector<double> history_stock;
+    switch (id) {
+    case OPEN:
+        for (auto &it: stock.first)
+            history_stock.push_back(it.open);
+        break;
+    case CLOSE:
+        for (auto &it: stock.first)
+            history_stock.push_back(it.close);
+        break;
+    case LOW:
+        for (auto &it: stock.first)
+            history_stock.push_back(it.low);
+        break;
+    case HIGH:
+        for (auto &it: stock.first)
+            history_stock.push_back(it.high);
+        break;
+    };
+    return history_stock;
+}
+
+void Stock::apIndi(const std::pair<std::string, std::vector<double>>& indi) {
+    stock.second[indi.first] = indi.second;
+}
 
 //// get
-_obj Stock::getThis();
-std::vector<Candle> Stock::getCandle();
-std::map<std::string, std::vector<double>> Stock::getIndicators();
+_obj Stock::getThis() const {
+    return stock;
+}
+
+std::vector<Candle> Stock::getCandle() const {
+    return stock.first;
+}
+
+std::map<std::string, std::vector<double>> Stock::getIndicators() const {
+    return stock.second;
+}
  
 
