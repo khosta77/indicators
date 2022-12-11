@@ -10,7 +10,6 @@
 #include <iomanip>
 #include <numeric>
 #include <functional>
-#include "candle.h"
 
 
 namespace SMA {
