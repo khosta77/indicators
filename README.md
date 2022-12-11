@@ -7,7 +7,7 @@ cmake, а он мульти платформенный.
 
 Сборка
 ```commandline
-cmake -build .
+cmake .
 ```
 
 Компиляция
