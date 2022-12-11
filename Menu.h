@@ -8,14 +8,14 @@
 #include <map>
 #include <cstdlib>
 #include <iomanip>
-#include "candle.h"
+#include "Stock.h"
 #include "indicator.h"
 #include <functional>
 #include <algorithm>
 #include <iomanip>
 
 class Menu {
-    /* \brief я пытался засуноть имя индикатора и его вызов в один объект, чтобы только в одном месте новые индикаторы
+    /* \brief я пытался объеденить имя индикатора и его вызов в один объект, чтобы только в одном месте новые индикаторы
      *        надо было добавлять, но там возникали архитектурные проблемы, по этому решил сделать этот момент
      *        немногот вульгарно, и просто в двух местах их указать, в памяти какие есть и при вызове конкретный вызывать.
      *
@@ -24,7 +24,6 @@ class Menu {
     std::vector<std::string> indicators = {
         "SMA"
     };
-    const int SMA = 1;
     //
 
     std::vector<std::pair<std::string, Stock>> stocks;
@@ -42,7 +41,7 @@ class Menu {
     void print_stock_in_memory();  // вывести все таблицы с котиорвками в памяти
     void open_file();              // открыть котировки акции
     void save_file();              // сохранить таблицу
-    void pring_stock();            // вывести в консоль таблицу
+    void print_stock();            // вывести в консоль таблицу
     void apply_indicator();        // применить индикатор к таблице
 
 public:

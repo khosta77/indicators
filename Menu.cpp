@@ -1,6 +1,5 @@
 #include "Menu.h"
 
-
 void Menu::print_menu() {
     std::cout << "1. Stock in memory\n"
               << "2. Read stock\n"
@@ -43,7 +42,7 @@ void Menu::save_file() {
     std::cout << std::endl;
 }
 
-void Menu::pring_stock() {
+void Menu::print_stock() {
     std::cout << "Enter the name of the table: ";
     std::cin >> tablename;
     for (auto &it : stocks)
@@ -66,10 +65,10 @@ void Menu::apply_indicator() {
     std::cout << "Enter the name of the table: ";
     std::cin >> tablename;
     switch (ind) {
-    case SMA:
+    case 1:
         for(auto &it : stocks)
             if (it.first == tablename)
-                it.apIndi(SMA::sma(it.get_price_stock(candle_marker), day));
+                it.second.apIndi(SMA::sma(it.second.get_price_stock(candle_marker), day));
         break;
     defualt:
         std::cout << "Unknown indicator" << std::endl;
@@ -79,31 +78,31 @@ void Menu::apply_indicator() {
 }
 
 Menu::~Menu() {
-    Stocks.clear();
+    stocks.clear();
     path.clear();
     filename.clear();
     tablename.clear();
     indicators.clear();
 }
 
-void Menu::run() {
+void Menu::run() {  // Исполняющий метод
     while (code != 6) {
         print_menu();
         switch (code) {
         case 1:
-            print_stock_in_memory();
+            this->print_stock_in_memory();
             break;
         case 2:
-            open_file();
+            this->open_file();
             break;
         case 3:
-            save_file();
+            this->save_file();
             break;
         case 4:
-            print_stock();
+            this->print_stock();
             break;
         case 5:
-            apply_indicator();
+            this->apply_indicator();
             break;
         case 6:
             std::cout << std::endl;
@@ -111,8 +110,6 @@ void Menu::run() {
         default:
             std::cout << "Unknown command" << std::endl;
             break;
-        }
+        };
     }
 }
-
-
