@@ -1,4 +1,4 @@
-#include "Stock.h"
+#include "../include/Stock.h"
 
 /* \brief Функция возращает код тикера
  * \param id - тикер

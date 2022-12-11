@@ -1,4 +1,4 @@
-#include "Menu.h"
+#include "../include/Menu.h"
 
 void Menu::print_menu() {
     std::cout << "1. Stock in memory\n"

@@ -1,4 +1,4 @@
-#include "indicator.h"
+#include "../include/indicator.h"
 
 namespace SMA {
 
