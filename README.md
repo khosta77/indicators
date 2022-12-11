@@ -125,8 +125,8 @@ Enter the name of the table: gazp
 
 ## Полезные ссылки
 
-![SMA(Simple Moving Average) индикатор](https://www.megafx.ru/Indikator-SMA-obzor-i-nastrojki-algoritma/?ysclid=lbjse1b3bf860852736)
+[SMA(Simple Moving Average) индикатор](https://www.megafx.ru/Indikator-SMA-obzor-i-nastrojki-algoritma/?ysclid=lbjse1b3bf860852736)
 
-![Исторические данные](https://www.finam.ru/profile/moex-akcii/gazprom/export/)
+[Исторические данные](https://www.finam.ru/profile/moex-akcii/gazprom/export/)
 
 
