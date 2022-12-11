@@ -7,32 +7,41 @@
 #include <vector>
 #include <map>
 #include <cstdlib>
-#include "utilites.h"
-#include "indicator.h"
-#include "indicator.h"
+
+#define DATE 0
+#define TIME 1 
+#define OPEN 2
+#define HIGH 3
+#define LOW 4
+#define CLOSE 5
+#define VOL 6
+
+/* \brief Объект свечя, при анализе используют обычно свечи, а не прямой поток графика, по этому 
+ *        рационально сделать было объект свечи, внутри класса акция
+ * */
+struct Candle {
+    double open;
+    double close;
+    double low;
+    double high;
+    int date;  // Дата и время просто подрят записываются, это дешевле и проще чем создание отдельного объекта.
+    int time;
+    unsigned long long value;
+};
 
 class Stock {
-    /* \brief Объект свечя, при анализе используют обычно свечи, а не прямой поток графика, по этому 
-     *        рационально сделать было объект свечи, внутри класса акция
-     * */
-    struct Candle {
-        double open;
-        double close;
-        double low;
-        double high;
-        int date;  // Дата и время просто подрят записываются, это дешевле и проще чем создание отдельного объекта.
-        int time;
-        unsigned long long value;
-    };
-    
-    typedef std::pair<std::vector<Candle>, std::map<std::string, std::vector<double>>> _obj; // Более короткая запись
-
-    _obj stock;  // Сама акция
+    std::pair<std::vector<Candle>, std::map<std::string, std::vector<double>>> stock;  // Сама акция
     const int SIZE_COLUMN = 8;  // Привыводе в консоль ширина колонки будет 8
+
+    /* \brief Метод возращает массив свечей
+     * \param line - строка с численной информацией
+     * \param title - колонки
+     * */
+    const Candle get_candle_from_line(const std::string& line, const std::map<std::string, int>& title);
 public:
     // Constructor && destrucktor
     Stock() = default;    
-    Stock(const std::string& fn) {}
+    Stock(const std::string& fn);
     ~Stock() = default;
 
     // in && out methods
@@ -40,7 +49,7 @@ public:
      *        не обработанные данные, то соответственно считываются только стандартные данные свечи.
      * \param filename - путь до файла
      * */
-    void read_csv(const std::string& fn);
+    int read_csv(const std::string& fn);
 
     /* \brief Метод записывает все данные в csv файл. В отличии от считывания записывает их без исключеният
      * \param filename - путь до файла
@@ -62,7 +71,7 @@ public:
     void apIndi(const std::pair<std::string, std::vector<double>>& indi);
 
     // get
-    _obj getThis() const;
+    std::pair<std::vector<Candle>, std::map<std::string, std::vector<double>>> getThis() const;
     std::vector<Candle> getCandle() const;
     std::map<std::string, std::vector<double>> getIndicators() const;
         

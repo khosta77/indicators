@@ -65,14 +65,9 @@ static const std::map<std::string, int> read_colomn_name_and_position(const std:
     return title;
 }
 
-/* \brief Метод возращает массив свечей
- * \param line - строка с численной информацией
- * \param title - колонки
- * */
-static const Candle get_candle_from_line(const std::string& line, 
-                                         const std::map<std::string, int>& title) {
+const Candle Stock::get_candle_from_line(const std::string& line, const std::map<std::string, int>& title) {
     Candle cndl;
-    for (auto &it : title)
+    for (auto it : title)
         switch (get_code_id(it.first)) {
         case DATE:
             cndl.date = std::atoi(get_num_from_line(line, it.second).c_str());
@@ -110,20 +105,22 @@ Stock::Stock(const std::string& fn) {
  *        не обработанные данные, то соответственно считываются только стандартные данные свечи.
  * \param filename - путь до файла
  * */
-void Stock::read_csv(const std::string& fn) {
+int Stock::read_csv(const std::string& fn) {
     std::vector<Candle> cndls;
     std::ifstream in(fn);
     if (in.is_open()) {
         std::string line;
-        getline(in, line);
+        getline(in, line); 
         auto title = read_colomn_name_and_position(line);
         while (getline(in, line))
             cndls.push_back(get_candle_from_line(line, title));
-    }
+    } else 
+        return -1;
     in.close();
     stock.first = cndls;
-    cndls.clear;
+    cndls.clear();
     stock.second = std::map<std::string, std::vector<double>>();
+    return 1;
 }
 
 void Stock::save_csv(const std::string& fn) {
@@ -133,7 +130,7 @@ void Stock::save_csv(const std::string& fn) {
         // Записываем заголовок
         out << "DATE;TIME;OPEN;HIGH;LOW;CLOSE;VOL";
         if (!stock.second.empty())
-            for (auto &it : stock)
+            for (auto &it : stock.second)
                 out << ";" << it.first;
         out << std::endl;
 
@@ -148,7 +145,7 @@ void Stock::save_csv(const std::string& fn) {
                 out << stock.first[i].date << ";" << stock.first[i].time << ";" << stock.first[i].open << ";" 
                     << stock.first[i].high << ";" << stock.first[i].low << ";" << stock.first[i].close << ";"
                     << stock.first[i].value;
-                for (auto &it : stock)
+                for (auto &it : stock.second)
                     out << ";" <<it.second[i];
                 out << std::endl;
             }   
@@ -158,62 +155,62 @@ void Stock::save_csv(const std::string& fn) {
 
 void Stock::print() {
     // Записываем заголовок
-    std::cout << std::setw(SIZE_COLOMN) << "DATE"
-              << std::setw(SIZE_COLOMN) << "TIME"
-              << std::setw(SIZE_COLOMN) << "OPEN"
-              << std::setw(SIZE_COLOMN) << "HIGH"
-              << std::setw(SIZE_COLOMN) << "LOW"
-              << std::setw(SIZE_COLOMN) << "CLOSE"
-              << std::setw(SIZE_COLOMN) << "VOL";
+    std::cout << std::setw(SIZE_COLUMN) << "DATE"
+              << std::setw(SIZE_COLUMN) << "TIME"
+              << std::setw(SIZE_COLUMN) << "OPEN"
+              << std::setw(SIZE_COLUMN) << "HIGH"
+              << std::setw(SIZE_COLUMN) << "LOW"
+              << std::setw(SIZE_COLUMN) << "CLOSE"
+              << std::setw(SIZE_COLUMN) << "VOL";
     if (!stock.second.empty())
-        for (auto &it : stock)
-            std::cout << std::setw(SIZE_COLOMN) << it.first;
+        for (auto &it : stock.second)
+            std::cout << std::setw(SIZE_COLUMN) << it.first;
     std::cout << std::endl;
 
     // записываем основоной набор данных
     if (stock.second.empty())
         for (size_t i = 0; i < stock.first.size(); ++i)
-            std::cout << std::setw(SIZE_COLOMN) << stock.first[i].date
-                      << std::setw(SIZE_COLOMN) << stock.first[i].time 
-                      << std::setw(SIZE_COLOMN) << stock.first[i].open 
-                      << std::setw(SIZE_COLOMN) << stock.first[i].high 
-                      << std::setw(SIZE_COLOMN) << stock.first[i].low 
-                      << std::setw(SIZE_COLOMN) << stock.first[i].close 
-                      << std::setw(SIZE_COLOMN) << stock.first[i].value << std::endl;
+            std::cout << std::setw(SIZE_COLUMN) << stock.first[i].date
+                      << std::setw(SIZE_COLUMN) << stock.first[i].time 
+                      << std::setw(SIZE_COLUMN) << stock.first[i].open 
+                      << std::setw(SIZE_COLUMN) << stock.first[i].high 
+                      << std::setw(SIZE_COLUMN) << stock.first[i].low 
+                      << std::setw(SIZE_COLUMN) << stock.first[i].close 
+                      << std::setw(SIZE_COLUMN) << stock.first[i].value << std::endl;
     else {
         for (size_t i = 0; i < stock.first.size(); ++i) {
-            std::cout << std::setw(SIZE_COLOMN) << stock.first[i].date
-                      << std::setw(SIZE_COLOMN) << stock.first[i].time
-                      << std::setw(SIZE_COLOMN) << stock.first[i].open
-                      << std::setw(SIZE_COLOMN) << stock.first[i].high
-                      << std::setw(SIZE_COLOMN) << stock.first[i].low
-                      << std::setw(SIZE_COLOMN) << stock.first[i].close
-                      << std::setw(SIZE_COLOMN) << stock.first[i].value;
-            for (auto &it : stock)
-                std::cout << std::setw(SIZE_COLOMN) <<it.second[i];
+            std::cout << std::setw(SIZE_COLUMN) << stock.first[i].date
+                      << std::setw(SIZE_COLUMN) << stock.first[i].time
+                      << std::setw(SIZE_COLUMN) << stock.first[i].open
+                      << std::setw(SIZE_COLUMN) << stock.first[i].high
+                      << std::setw(SIZE_COLUMN) << stock.first[i].low
+                      << std::setw(SIZE_COLUMN) << stock.first[i].close
+                      << std::setw(SIZE_COLUMN) << stock.first[i].value;
+            for (auto &it : stock.second)
+                std::cout << std::setw(SIZE_COLUMN) <<it.second[i];
             std::cout << std::endl;
         }   
     }
 }
 
 //// indicators
-const std::vector<double> get_price_stock(const int& id) {
+const std::vector<double> Stock::get_price_stock(const int& id) {
     std::vector<double> history_stock;
     switch (id) {
     case OPEN:
-        for (auto &it: stock.first)
+        for (auto &it : stock.first)
             history_stock.push_back(it.open);
         break;
     case CLOSE:
-        for (auto &it: stock.first)
+        for (auto &it : stock.first)
             history_stock.push_back(it.close);
         break;
     case LOW:
-        for (auto &it: stock.first)
+        for (auto &it : stock.first)
             history_stock.push_back(it.low);
         break;
     case HIGH:
-        for (auto &it: stock.first)
+        for (auto &it : stock.first)
             history_stock.push_back(it.high);
         break;
     };
@@ -225,7 +222,7 @@ void Stock::apIndi(const std::pair<std::string, std::vector<double>>& indi) {
 }
 
 //// get
-_obj Stock::getThis() const {
+std::pair<std::vector<Candle>, std::map<std::string, std::vector<double>>> Stock::getThis() const {
     return stock;
 }
 
