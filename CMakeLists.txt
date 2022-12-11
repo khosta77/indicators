@@ -3,6 +3,6 @@ project(main)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE main.cpp candle.cpp indicator.h)
-set(HEADER candle.h indicator.h)
+set(SOURCE main.cpp Stock.cpp Menu.h)
+set(HEADER Stock.h Menu.h)
 add_executable(main ${SOURCE} ${HEADER})
